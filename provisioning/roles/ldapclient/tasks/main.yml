@@ -1,0 +1,13 @@
+- name: LDAP packages are installed
+  yum:
+    name: '{{ item }}'
+    state: present
+    #yum: name={{ item }} state=installed
+  with_items:
+    - openldap
+    - compat-openldap
+    - openldap-clients
+    - openldap-devel
+    - openssh-ldap
+    - python-ldap
+    - openssl

@@ -1,0 +1,3 @@
+- name: enable selinux
+#  command: /sbin/setenforce 1
+  command: /sbin/setenforce 0

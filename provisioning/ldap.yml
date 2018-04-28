@@ -1,0 +1,20 @@
+---
+# This playbook deploys the whole application stack in this site.
+
+- name: settings for all vm 
+  hosts: allvms
+  #remote_user: vagrant
+  #become: yes
+  #become_method: su
+  roles:
+    - common
+
+- name: install ldap server
+  hosts: ldapservers
+  roles:
+    - ldapserver
+
+- name: install ldap client
+  hosts: ldapclients
+  roles:
+    - ldapclient
