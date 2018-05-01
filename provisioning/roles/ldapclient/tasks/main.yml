@@ -4,6 +4,8 @@
 #   3. Join to domain
 
 - name: LDAP packages are installed
+  become: yes
+  ignore_errors: yes
   yum:
     name: '{{ item }}'
     state: present
@@ -18,10 +20,13 @@
     - openssl
     - libsemanage-python
     - nss-pam-ldapd
+  notify:
+    - restart ldap client
 
 - name: add the client machine to LDAP 
   become: yes
-  command: /usr/bin/authconfig --enableldap --enableldapauth --ldapserver={{ ldap_master }},{{ ldap_slave }} --ldapbasedn="{{ dn_Suffix }}" --enablemkhomedir --update
+  ignore_errors: yes
+  command: /sbin/authconfig --enableldap --enableldapauth --ldapserver={{ ldap_master }},{{ ldap_slave }} --ldapbasedn="{{ dn_Suffix }}" --enablemkhomedir --update
   notify:
-    - restart ldap
+    - restart ldap client
 

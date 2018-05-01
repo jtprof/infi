@@ -14,10 +14,16 @@ groups:
         vmNameSearchTemplate: 'ldapsrv1'
         active: False
         order : 2
+        addsetting: True
+        setingvar: "ldap_master"
+        ownvar: "members"
     ldapslaves:    
         vmNameSearchTemplate: 'ldapsrv[2..9]+'
         active: False
         order : 2
+        addsetting: True
+        setingvar: "ldap_slave"
+        ownvar: "members"
     ldapclients:
         vmNameBuildTemplate: 'workstation'
         active: True
@@ -43,13 +49,5 @@ settings:
     network: "192.168.33."
     dn_replretry: "30 5 300 3"
     dn_replinterval: "00:00:05:00"
-    SSHARootPWD: "{SSHA}7P/9Hf7ckkGn87/jaje9CqcCcjRn65wP"   #ldp#passw0rd
-    dn_admin: "cn=ldapadm,dc=infi-test,dc=local"
-    dn_dc: "infi-test"
-    dn_firstOU: "FirstOU"
-    dn_firstGroup: "Bifurcation"
-    dn_user: "flyx"
-    dn_userFullName: "Huge unpredictible Fluctuation"
-    SSHAuserPWD: "{SSHA}xqAQU/brcjDTr0NuTUS9MhDNEWRa9llI" #Unique#Passw0rd
 #    ldap_master: "192.168.33.254"
 #    ldap_slave: "192.168.33.253"

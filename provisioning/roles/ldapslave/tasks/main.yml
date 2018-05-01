@@ -12,5 +12,6 @@
 - name: modify ldap with configuration file
   become: yes
   command: /usr/bin/ldapmodify -Y EXTERNAL -H ldapi:/// -f ~/repl.ldif
+  ignore_errors: True
   notify:
     - restart ldap

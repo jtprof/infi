@@ -1,0 +1,9 @@
+---
+- name: restart ldap client
+  become: yes
+  #service: name={{ ldap_service }} state=started enabled=yes
+  service:
+    name: nslcd
+    state: restarted
+
+
