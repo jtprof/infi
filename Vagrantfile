@@ -4,7 +4,7 @@
 #load config file from current folder
 require 'yaml'
 current_dir    = File.dirname(File.expand_path(__FILE__))
-configs        = YAML.load_file("#{current_dir}/config.yaml")
+configs        = YAML.load_file("#{current_dir}/config.yml")
 
 #sore groups in order
 grp = configs['groups'].sort_by { |k, value| value['order'] }
