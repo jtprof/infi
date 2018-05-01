@@ -1,5 +1,5 @@
 ---
-# This playbook deploys the whole application stack in this site.
+# This playbook deploys two ldap severs andone workstation with user.
 
 - name: settings for all vm 
   hosts: allvms
