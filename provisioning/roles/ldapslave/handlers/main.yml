@@ -20,3 +20,7 @@
     name: rsyslog
     state: restarted
 
+- name: clear temporary files
+  become: yes
+  command: rm -f ~/*.ldif
+  ignore_errors: True

@@ -30,10 +30,30 @@
   become: yes
   seboolean: name=mysql_connect_any state=true persistent=yes
 
+- name: start firewalld
+  become: yes
+  ignore_errors: yes
+  service:
+    name: firewalld
+    state: started
+
 - name: insert firewalld rule for ldap
   become: yes
   firewalld: port={{ ldap_port }}/tcp permanent=true state=enabled immediate=yes
-  #ignore_errors: yes
+  ignore_errors: yes
   notify:
     - restart firewalld
+
+- name: start ldap
+  become: yes
+  #service: name={{ ldap_service }} state=started enabled=yes
+  service:
+    name: "{{ ldap_service }}"
+    state: started
+
+- name: Configure Rsyslog to log LDAP
+  become: yes
+  command: echo "local4.* /var/log/ldap.log" >> /etc/rsyslog.conf
+  notify:
+    - restart rsyslog
 
