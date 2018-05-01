@@ -1,3 +1,6 @@
+#TODO 20180429
+#   1. Change setenforce to 1 
 - name: enable selinux
 #  command: /sbin/setenforce 1
-  command: /sbin/setenforce 0
+  become: yes
+  command: "/sbin/setenforce 0 "

@@ -1,3 +1,8 @@
+#TODO 20180429
+#   1. Change "Configure SELinux to start openldap" to real policy
+#   2. Deploy configuration file
+#   3. Deploy replication
+
 - name: LDAP packages are installed
   become: yes
   yum:
@@ -13,26 +18,22 @@
     - openssh-ldap
     - python-ldap
     - openssl
+    - libsemanage-python
+    - cyrus-sasl
+    - cyrus-sasl-devel
+    - libtool-ltdl
+    - unixODBC
+  notify:
+    - restart ldap
 
 - name: Configure SELinux to start openldap on any port
+  become: yes
   seboolean: name=mysql_connect_any state=true persistent=yes
 
-- name: Start firewalld
-  service: name=firewalld state=started enabled=yes
-
 - name: insert firewalld rule for ldap
+  become: yes
   firewalld: port={{ ldap_port }}/tcp permanent=true state=enabled immediate=yes
-  ignore_errors: yes
-
-- name: Start openldap Service
-  service: name={{ ldap_service }} state=started enabled=yes
-
-
-#- name: Configure SELinux to allow httpd to connect to remote database
-#  seboolean: name=httpd_can_network_connect_db state=true persistent=yes
-
-    #yum: name={{ item }} state=installed
-    #remote_user: vagrant
-    #
-    #become_method: su
+  #ignore_errors: yes
+  notify:
+    - restart firewalld
 

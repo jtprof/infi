@@ -1,0 +1,17 @@
+dn: uid={{ dn_repluser }},ou={{ dn_firstOU }},{{ dn_Suffix }}
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: {{ dn_repluser }}
+uid: {{ dn_repluser }}
+uidNumber: 9999
+gidNumber: 100
+homeDirectory: /home/{{ dn_repluser }}
+loginShell: /bin/bash
+gecos: {{ dn_repluserFullName }}
+userPassword: {{ SSHAreplPWD }}
+shadowLastChange: 17058
+shadowMin: 0
+shadowMax: 99999
+shadowWarning: 7

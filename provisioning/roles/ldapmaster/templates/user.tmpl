@@ -1,0 +1,17 @@
+dn: uid={{ dn_user }},ou={{ dn_firstOU }},{{ dn_Suffix }}
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: {{ dn_user }}
+uid: {{ dn_user }}
+uidNumber: 9999
+gidNumber: 100
+homeDirectory: /home/{{ dn_user }}
+loginShell: /bin/bash
+gecos: {{ dn_userFullName }}
+userPassword: {{ SSHAuserPWD }}
+shadowLastChange: 17058
+shadowMin: 0
+shadowMax: 99999
+shadowWarning: 7

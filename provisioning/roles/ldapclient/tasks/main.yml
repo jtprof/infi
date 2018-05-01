@@ -1,3 +1,8 @@
+#TODO 20180429
+#   1. Crate SELinux policy
+#   2. Deploy configuration file
+#   3. Join to domain
+
 - name: LDAP packages are installed
   yum:
     name: '{{ item }}'
@@ -11,3 +16,10 @@
     - openssh-ldap
     - python-ldap
     - openssl
+    - libsemanage-python
+    - nss-pam-ldapd
+
+- name: add the client machine to LDAP 
+  become: yes
+  command: /usr/bin/authconfig --enableldap --enableldapauth --ldapserver={{ ldap_master }},{{ ldap_slave }} --ldapbasedn="{{ dn_Suffix }}" --enablemkhomedir --update
+

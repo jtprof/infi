@@ -1,0 +1,13 @@
+dn: {{ dn_Suffix }}
+dc: {{ dn_dc }}
+objectClass: top
+objectClass: domain
+
+dn: {{ dn_admin }}
+objectClass: organizationalRole
+cn: ldapadm
+description: LDAP Manager
+
+dn: ou={{ dn_firstOU }},{{ dn_Suffix }}
+objectClass: organizationalUnit
+ou: {{ dn_firstOU }}

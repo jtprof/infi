@@ -3,16 +3,21 @@
 
 - name: settings for all vm 
   hosts: allvms
-  #remote_user: vagrant
-  #become: yes
-  #become_method: su
   roles:
     - common
 
-- name: install ldap server
-  hosts: ldapservers
+
+- name: install ldap ldapsmaster server
+  hosts: ldapmasters
   roles:
     - ldapserver
+    - ldapmaster
+
+- name: install ldap slave server
+  hosts: ldapslaves
+  roles:
+    - ldapserver
+    - ldapslave
 
 - name: install ldap client
   hosts: ldapclients

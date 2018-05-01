@@ -1,0 +1,99 @@
+#TODO 20180429
+#   1. Change "Configure SELinux to start openldap" to real policy
+#   2. Deploy configuration file
+#   3. Deploy replication
+
+- name: copy template ldap configuration file
+  become: yes
+  template: src=db.tmpl dest=~/db.ldif
+
+- name: modify ldap with configuration file
+  become: yes
+  command: /usr/bin/ldapmodify -Y EXTERNAL -H ldapi:/// -f ~/db.ldif
+  notify:
+    - restart ldap
+
+- name: copy database configuration file
+  become: yes
+  template: src=DB_CONFIG.tmpl dest=/var/lib/ldap/DB_CONFIG
+  notify:
+    - restart ldap
+
+- name: add cosine LDAP schema
+  become: yes
+  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
+  notify:
+    - restart ldap
+  ignore_errors: True
+
+- name: add nis LDAP schema
+  become: yes
+  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif
+  notify:
+    - restart ldap
+  ignore_errors: True
+
+- name: add cosine LDAP schema
+  become: yes
+  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
+  notify:
+    - restart ldap
+  ignore_errors: True
+
+- name: copy template ldap structure file
+  become: yes
+  template: src=base.tmpl dest=~/base.ldif
+
+- name: modify ldap with structure file
+  become: yes
+  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f ~/base.ldif
+  ignore_errors: True
+  notify:
+    - restart ldap
+
+- name: copy template ldap structure file
+  become: yes
+  template: src=syncprov.tmpl dest=~/syncprov.ldif
+
+- name: modify ldap with replication sync file
+  become: yes
+  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f ~/syncprov.ldif
+  ignore_errors: True
+  notify:
+    - restart ldap
+
+- name: copy template ldap replication user file
+  become: yes
+  template: src=repluser.tmpl dest=~/repluser.ldif
+
+- name: modify ldap with replication user file
+  become: yes
+  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f ~/repluser.ldif
+  ignore_errors: True
+
+- name: copy template ldap ordinal user file
+  become: yes
+  template: src=user.tmpl dest=~/user.ldif
+
+- name: modify ldap with ordinal user file
+  become: yes
+  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f ~/user.ldif
+  ignore_errors: True
+
+#- name: modify ordinal user password
+#  become: yes
+#  command: /usr/bin/ldappasswd -s {{ dn_userpassword }} -y ~/ldapAdminPWDHash -D "{{ dn_admin }}" -x "uid= {{ dn_user }},ou={{ dn_firstOU }},{{ dn_Suffix }}"
+#  notify:
+#    - restart ldap
+
+- name: Configure Rsyslog to log LDAP
+  become: yes
+  command: echo "local4.* /var/log/ldap.log" >> /etc/rsyslog.conf
+  notify:
+    - restart rsyslog
+
+- name: clear temporary files
+  become: yes
+  command: rm -f ~/*.ldif
+  ignore_errors: True
+
