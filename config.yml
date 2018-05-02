@@ -16,14 +16,14 @@ groups:
         order : 2
         addsetting: True
         setingvar: "ldap_master"
-        ownvar: "members"
+        ownvar: "addreses"
     ldapslaves:    
         vmNameSearchTemplate: 'ldapsrv[2..9]+'
         active: False
         order : 2
         addsetting: True
         setingvar: "ldap_slave"
-        ownvar: "members"
+        ownvar: "addreses"
     ldapclients:
         vmNameBuildTemplate: 'workstation'
         active: True
@@ -37,6 +37,7 @@ settings:
     dn_repluser: "repluser"
     dn_repluserFullName: "User for ldap replication"
     SSHAreplPWD: "{SSHA}nR+wYuff6LRH2zkn54wvcz0b2VsyOkuC"   #UniQue#Passw0rd
+    CLRrootPWD: "ldp#passw0rd"
     SSHARootPWD: "{SSHA}7P/9Hf7ckkGn87/jaje9CqcCcjRn65wP"   #ldp#passw0rd
     dn_admin: "cn=ldapadm,dc=infi-test,dc=local"
     dn_dc: "infi-test"

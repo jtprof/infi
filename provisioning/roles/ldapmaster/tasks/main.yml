@@ -1,26 +1,4 @@
-#TODO 20180429
-#   1. Change "Configure SELinux to start openldap" to real policy
-#   2. Deploy configuration file
-#   3. Deploy replication
-
-- name: copy template ldap configuration file
-  become: yes
-  template: src=db.tmpl dest=~/db.ldif
-  notify:
-    - clear temporary files
-
-- name: modify ldap with configuration file
-  become: yes
-  command: /usr/bin/ldapmodify -Y EXTERNAL -H ldapi:/// -f ~/db.ldif
-  notify:
-    - restart ldap
-
-- name: copy database configuration file
-  become: yes
-  template: src=DB_CONFIG.tmpl dest=/var/lib/ldap/DB_CONFIG
-  notify:
-    - restart ldap
-
+---
 - name: add cosine LDAP schema
   become: yes
   command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
@@ -76,7 +54,7 @@
 
 - name: modify ldap with replication user file
   become: yes
-  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f ~/repluser.ldif
+  command: /usr/bin/ldapadd -x -w "{{ CLRrootPWD }}" -D "{{ dn_admin}}" -f ~/repluser.ldif
   ignore_errors: True
 
 - name: copy template ldap ordinal user file
@@ -87,5 +65,5 @@
 
 - name: modify ldap with ordinal user file
   become: yes
-  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f ~/user.ldif
+  command: /usr/bin/ldapadd -x -w "{{ CLRrootPWD }}" -D "{{ dn_admin}}" -f ~/user.ldif
   ignore_errors: True

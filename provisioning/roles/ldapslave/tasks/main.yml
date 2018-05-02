@@ -1,8 +1,4 @@
-#TODO 20180429
-#   1. Change "Configure SELinux to start openldap" to real policy
-#   2. Deploy configuration file
-#   3. Deploy replication
-
+---
 - name: copy ldap replication configuration file
   become: yes
   template: src=repl.tmpl dest=~/repl.ldif

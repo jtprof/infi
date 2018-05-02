@@ -27,18 +27,21 @@ Vagrant.configure("2") do |config|
   grp.each do |e, value|
     #prepare list of virtual machines in the current group
     value['members'] = Array.new
+    value['addreses'] = Array.new
     if value['active']
       #if the group marked as active add new virtual machines
       (1..value['vmCount']).each do |machine_id|
         vmname = "#{value['vmNameBuildTemplate']}#{machine_id}"
+        vmaddr = "#{settings['network']}#{machine_id+value['networkBaseAddress']}"
         config.vm.define vmname do |machine|
           machine.vm.box =  "centos/7"
           machine.vm.box_check_update = false
           machine.vm.synced_folder ".", "/vagrant", type: "nfs"
           machine.vm.hostname = vmname
-          machine.vm.network "private_network", ip: "#{settings['network']}#{machine_id+value['networkBaseAddress']}"
+          machine.vm.network "private_network", ip: vmaddr
         end
         value['members'].push(vmname)
+        value['addreses'].push(vmaddr)
         vms.push(vmname)
       end
     else

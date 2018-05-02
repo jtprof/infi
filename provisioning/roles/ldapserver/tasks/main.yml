@@ -1,7 +1,6 @@
-#TODO 20180429
+---
+#TODO 20180501
 #   1. Change "Configure SELinux to start openldap" to real policy
-#   2. Deploy configuration file
-#   3. Deploy replication
 
 - name: LDAP packages are installed
   become: yes
@@ -56,4 +55,24 @@
   command: echo "local4.* /var/log/ldap.log" >> /etc/rsyslog.conf
   notify:
     - restart rsyslog
+
+- name: copy template ldap configuration file
+  become: yes
+  template: src=db.tmpl dest=~/db.ldif
+  notify:
+    - clear temporary files
+
+- name: modify ldap with configuration file
+  become: yes
+  command: /usr/bin/ldapmodify -Y EXTERNAL -H ldapi:/// -f ~/db.ldif
+  notify:
+    - restart ldap
+
+- name: copy database configuration file
+  become: yes
+  template: src=DB_CONFIG.tmpl dest=/var/lib/ldap/DB_CONFIG
+  notify:
+    - restart ldap
+
+
 
