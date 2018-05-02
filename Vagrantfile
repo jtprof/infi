@@ -54,7 +54,7 @@ Vagrant.configure("2") do |config|
       end
     end
     if value['addsetting']
-      #add new value in settings in case
+      #add new value in settings if it's configured
       settings[value['setingvar']] = value[value['ownvar']].join(',')
     end
   end
