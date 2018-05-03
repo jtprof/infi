@@ -10,20 +10,17 @@ groups:
         vmCount: 2
         networkBaseAddress: 200
         order : 0
+        addsetting: True
+        setingvar: "ldap_servers"
+        ownvar: "addreses"
     ldapmasters:
         vmNameSearchTemplate: 'ldapsrv1'
         active: False
         order : 2
-        addsetting: True
-        setingvar: "ldap_master"
-        ownvar: "addreses"
     ldapslaves:    
         vmNameSearchTemplate: 'ldapsrv[2..9]+'
         active: False
         order : 2
-        addsetting: True
-        setingvar: "ldap_slave"
-        ownvar: "addreses"
     ldapclients:
         vmNameBuildTemplate: 'workstation'
         active: True
