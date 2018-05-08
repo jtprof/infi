@@ -3,8 +3,9 @@
   become: yes
   #service: name={{ ldap_service }} state=started enabled=yes
   service:
-    name: "{{ ldap_service }}"
+    name: slapd
     state: restarted
+    enabled: yes
 
 - name: restart firewalld
   become: yes
@@ -12,6 +13,7 @@
   service:
     name: firewalld
     state: restarted
+    enabled: yes
 
 - name: restart rsyslog
   become: yes
@@ -19,4 +21,5 @@
   service:
     name: rsyslog
     state: restarted
+    enabled: yes
 

@@ -31,25 +31,27 @@ Vagrant.configure("2") do |config|
     if value['active']
       #if the group marked as active add new virtual machines
       (1..value['vmCount']).each do |machine_id|
-        vmname = "#{value['vmNameBuildTemplate']}#{machine_id}"
-        vmaddr = "#{settings['network']}#{machine_id+value['networkBaseAddress']}"
-        config.vm.define vmname do |machine|
+        vm = Hash.new
+        vm['name'] = "#{value['vmNameBuildTemplate']}#{machine_id}"
+        vm['addr'] = "#{settings['network']}#{machine_id+value['networkBaseAddress']}"
+        config.vm.define vm['name'] do |machine|
           machine.vm.box =  "centos/7"
           machine.vm.box_check_update = false
           machine.vm.synced_folder ".", "/vagrant", type: "nfs"
-          machine.vm.hostname = vmname
-          machine.vm.network "private_network", ip: vmaddr
+          machine.vm.hostname = vm['name']
+          machine.vm.network "private_network", ip: vm['addr']
         end
-        value['members'].push(vmname)
-        value['addreses'].push(vmaddr)
-        vms.push(vmname)
+        value['members'].push(vm['name'])
+        value['addreses'].push(vm['addr'])
+        vms.push(vm)
       end
     else
       #Check if the virtual machine name match with group vm pattern
-      vms.each do |vmname|
-        if /#{value['vmNameSearchTemplate']}/.match(vmname) != nil
+      vms.each do |vm|
+        if /#{value['vmNameSearchTemplate']}/.match(vm['name']) != nil
           #add vm name in group if yes
-          value['members'].push(vmname)
+          value['members'].push(vm['name'])
+          value['addreses'].push(vm['addr'])
         end
       end
     end

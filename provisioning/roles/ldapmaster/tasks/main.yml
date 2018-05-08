@@ -1,25 +1,4 @@
 ---
-- name: add cosine LDAP schema
-  become: yes
-  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
-  notify:
-    - restart ldap
-  ignore_errors: True
-
-- name: add nis LDAP schema
-  become: yes
-  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif
-  notify:
-    - restart ldap
-  ignore_errors: True
-
-- name: add inetorgperson LDAP schema
-  become: yes
-  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
-  notify:
-    - restart ldap
-  ignore_errors: True
-
 - name: copy template ldap structure file
   become: yes
   template: src=base.tmpl dest=~/base.ldif

@@ -2,10 +2,10 @@ dn: olcDatabase={2}hdb,cn=config
 changetype: modify
 add: olcSyncRepl
 olcSyncRepl: rid=019
-  provider=ldap://{{ ldap_master }}:{{ ldap_port }}/
+  provider=ldap://{{ ldap_master }}:389
   bindmethod=simple
-  binddn="uid={{ dn_repluser }},{{ dn_Suffix }}"
-  credentials={{ SSHAreplPWD }}
+  binddn="uid={{ dn_repluser }},ou={{ dn_firstOU }},{{ dn_Suffix }}"
+  credentials={{ CLRreplPWD }}
   searchbase="{{ dn_Suffix }}"
   scope=sub
   schemachecking=on

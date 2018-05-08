@@ -35,20 +35,35 @@
   service:
     name: firewalld
     state: started
+    enabled: yes
 
-- name: insert firewalld rule for ldap
+- name: insert firewalld rule for ldap port 389
   become: yes
-  firewalld: port={{ ldap_port }}/tcp permanent=true state=enabled immediate=yes
+  firewalld: port=389/tcp permanent=true state=enabled immediate=yes
+  ignore_errors: yes
+  notify:
+    - restart firewalld
+
+- name: insert firewalld rule for ldap port 636
+  become: yes
+  firewalld: port=636/tcp permanent=true state=enabled immediate=yes
+  ignore_errors: yes
+  notify:
+    - restart firewalld
+
+- name: insert firewalld rule for ldap port 9830
+  become: yes
+  firewalld: port=9830/tcp permanent=true state=enabled immediate=yes
   ignore_errors: yes
   notify:
     - restart firewalld
 
 - name: start ldap
   become: yes
-  #service: name={{ ldap_service }} state=started enabled=yes
   service:
-    name: "{{ ldap_service }}"
+    name: slapd
     state: started
+    enabled: yes
 
 - name: Configure Rsyslog to log LDAP
   become: yes
@@ -74,5 +89,25 @@
   notify:
     - restart ldap
 
+- name: add cosine LDAP schema
+  become: yes
+  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
+  notify:
+    - restart ldap
+  ignore_errors: True
+
+- name: add nis LDAP schema
+  become: yes
+  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif
+  notify:
+    - restart ldap
+  ignore_errors: True
+
+- name: add inetorgperson LDAP schema
+  become: yes
+  command: /usr/bin/ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/inetorgperson.ldif
+  notify:
+    - restart ldap
+  ignore_errors: True
 
 
